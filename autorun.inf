@@ -1,0 +1,18 @@
+[Unit]
+type = Script
+name = autorun
+description = 
+createdBy = 
+version = 
+
+[Script]
+main = main
+Lang = python
+enable = true
+isolationGroup = gvsig-base
+
+[properties]
+autorun.group.name = gvsig-base
+autorun.group.order = 1000
+autorun.order = 2150
+
