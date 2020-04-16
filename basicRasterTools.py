@@ -9,6 +9,8 @@ from gvsig import getResource
 from gvsig.libs.formpanel import FormPanel, load_icon
 from gvsig.commonsdialog import msgbox
 from org.gvsig.tools.swing.api import ToolsSwingLocator
+from org.gvsig.fmap.dal.swing import DALSwingLocator
+from gvsig import logger,LOGGER_WARN
 
 class TransparencySRSAndOverviewsRasterTools(FormPanel):
     def __init__(self):
@@ -22,16 +24,18 @@ class TransparencySRSAndOverviewsRasterTools(FormPanel):
 
         self.inputfileS = toolsSwingManager.createFilePickerController(self.txtInputFileS, self.btnInputFileS)
         self.outputfileS = toolsSwingManager.createFilePickerController(self.txtOutputFileS, self.btnOutputFileS)
+        self.projS = DALSwingLocator.getDataSwingManager().createProjectionPickerController(self.txtNewSRS, self.btnNewSRS)
 
         self.inputfileO = toolsSwingManager.createFilePickerController(self.txtInputFileO, self.btnFileO)
 
-        self.setPreferredSize(500,275)
+        self.setPreferredSize(500,300)
 
     def btnTransp_click(self, *args):
         #GUI INFO
         inputFT=self.inputfileT.get()
         outputFT=self.outputfileT.get()
         colorTr=self.colorT.get()
+        outputFormat=self.cboOutputFormatT.getSelectedItem()
         
         if inputFT == None: 
             msgbox("No hay especificado un fichero de entrada")
@@ -49,16 +53,17 @@ class TransparencySRSAndOverviewsRasterTools(FormPanel):
         #Request
         cmdGdalwarp=[
                gdalwarpFile,
-               r"-srcnodata",
-               '"%s %s %s"' %(colorTr.getRed(),colorTr.getGreen(),colorTr.getBlue()),
-               r"-dstnodata",
-               '"%s %s %s"' %(colorTr.getRed(),colorTr.getGreen(),colorTr.getBlue()),
+               r"-srcnodata",'"%s %s %s"' %(colorTr.getRed(),colorTr.getGreen(),colorTr.getBlue()),
+               r"-dstnodata",'"%s %s %s"' %(colorTr.getRed(),colorTr.getGreen(),colorTr.getBlue()),
                r"-dstalpha",
+               r"-of",str(outputFormat),
                inputFT.getAbsolutePath(),
                outputFT.getAbsolutePath()
                ]
-        gdalwarp=subprocess.call(cmdGdalwarp)
-        if gdalwarp==1:
+        logger(str(cmdGdalwarp))
+        returnCode=subprocess.call(cmdGdalwarp)
+        if returnCode!=0:
+            logger('Error al ejecutar el comando de GDAL (returnCode %s)' %returnCode,LOGGER_WARN)
             msgbox("Error en el proceso")
         else:
             msgbox("Proceso ejecutado con exito")
@@ -69,9 +74,10 @@ class TransparencySRSAndOverviewsRasterTools(FormPanel):
         #GUI INFO
         inputFS=self.inputfileS.get()
         outputFS=self.outputfileS.get()
-        newSRS=self.txtSRS.getText()
+        newSRS=self.projS.get().getAbrev()
         compress=self.radioCompressorS.isSelected()
         tiles=self.radioTilesS.isSelected()
+        outputFormat=self.cboOutputFormatSRS.getSelectedItem()
         
         if inputFS == None: 
             msgbox("No hay especificado un fichero de entrada")
@@ -80,7 +86,11 @@ class TransparencySRSAndOverviewsRasterTools(FormPanel):
         if outputFS == None: 
             msgbox("No hay especificado un fichero de salida")
             return
-
+            
+        if newSRS == None: 
+            msgbox("No hay especificado SRS")
+            return
+            
         if compress:
             compressF="COMPRESS=DEFLATE" #Se puede cambiar el algoritmo de compresion (PACKBITS, DEFLATE, LZW, LZMA, ZSTD)
         else:
@@ -99,17 +109,17 @@ class TransparencySRSAndOverviewsRasterTools(FormPanel):
         #Request
         cmdGdal_translate=[
                gdal_translateFile,
-               r"-a_srs",
-               newSRS,
-               r"-co",
-               compressF,
-               r"-co",
-               tilesF,
+               r"-a_srs",newSRS,
+               r"-co",compressF,
+               r"-co",tilesF,
+               r"-of",str(outputFormat),
                inputFS.getAbsolutePath(),
                outputFS.getAbsolutePath()
                ]
-        gdal_translate=subprocess.call(cmdGdal_translate)
-        if gdal_translate==1:
+        logger(str(cmdGdal_translate))
+        returnCode=subprocess.call(cmdGdal_translate)
+        if returnCode!=0:
+            logger('Error al ejecutar el comando de GDAL (returnCode %s)' %returnCode,LOGGER_WARN)
             msgbox("Error en el proceso")
         else:
             msgbox("Proceso ejecutado con exito")
@@ -140,8 +150,10 @@ class TransparencySRSAndOverviewsRasterTools(FormPanel):
                "8",
                "16"
                ]
-        gdaladdo=subprocess.call(cmdGdaladdo)
-        if gdaladdo==1:
+        logger(str(cmdGdaladdo))
+        returnCode=subprocess.call(cmdGdaladdo)
+        if returnCode!=0:
+            logger('Error al ejecutar el comando de GDAL (returnCode %s)' %returnCode,LOGGER_WARN)
             msgbox("Error en el proceso")
         else:
             msgbox("Proceso ejecutado con exito")

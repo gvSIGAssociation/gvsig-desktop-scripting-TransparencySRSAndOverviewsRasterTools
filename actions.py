@@ -68,5 +68,9 @@ def selfRegister():
   application.addSelectableTool(action, "basicRasterTools")
 
 def main(*args):
-  selfRegister()
+  #selfRegister()
+  icon = File(getResource(__file__,"images","tools-basicrastertools.png")).toURI().toURL()
+  print icon
+  icon.openStream()
+  print 'VA'
   
