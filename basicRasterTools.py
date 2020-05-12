@@ -12,6 +12,7 @@ from org.gvsig.tools.swing.api import ToolsSwingLocator
 from org.gvsig.fmap.dal.swing import DALSwingLocator
 from gvsig import logger,LOGGER_WARN
 from org.gvsig.tools import ToolsLocator
+from java.awt import Color
 
 class TransparencySRSAndOverviewsRasterTools(FormPanel):
     def __init__(self):
@@ -22,6 +23,7 @@ class TransparencySRSAndOverviewsRasterTools(FormPanel):
         self.inputfileT = toolsSwingManager.createFilePickerController(self.txtInputFileT, self.btnInputFileT)
         self.outputfileT = toolsSwingManager.createFilePickerController(self.txtOutputFileT, self.btnOutputFileT)
         self.colorT = toolsSwingManager.createColorPickerController(self.txtColorT, self.btnColorT)
+        self.colorT.set(Color(97, 97, 97))
 
         self.inputfileS = toolsSwingManager.createFilePickerController(self.txtInputFileS, self.btnInputFileS)
         self.outputfileS = toolsSwingManager.createFilePickerController(self.txtOutputFileS, self.btnOutputFileS)
