@@ -11,6 +11,7 @@ from gvsig.commonsdialog import msgbox
 from org.gvsig.tools.swing.api import ToolsSwingLocator
 from org.gvsig.fmap.dal.swing import DALSwingLocator
 from gvsig import logger,LOGGER_WARN
+from org.gvsig.tools import ToolsLocator
 
 class TransparencySRSAndOverviewsRasterTools(FormPanel):
     def __init__(self):
@@ -46,9 +47,7 @@ class TransparencySRSAndOverviewsRasterTools(FormPanel):
             return
             
         #Path INFO
-        pluginsManager = PluginsLocator.getManager()
-        appfolder = pluginsManager.getApplicationFolder().getAbsolutePath()
-        gdalwarpFile="%s/gvSIG/extensiones/org.gvsig.gdal.app.mainplugin/gdal/bin/gdal/apps/gdalwarp" % appfolder.replace("\\","/")
+        gdalwarpFile= getCommand("gdalwarp")
 
         #Request
         cmdGdalwarp=[
@@ -102,9 +101,7 @@ class TransparencySRSAndOverviewsRasterTools(FormPanel):
             tilesF="TILED=NO"
             
         #Path INFO
-        pluginsManager = PluginsLocator.getManager()
-        appfolder = pluginsManager.getApplicationFolder().getAbsolutePath()
-        gdal_translateFile="%s/gvSIG/extensiones/org.gvsig.gdal.app.mainplugin/gdal/bin/gdal/apps/gdal_translate" % appfolder.replace("\\","/")
+        gdal_translateFile= getCommand("gdal_translate")
 
         #Request
         cmdGdal_translate=[
@@ -134,9 +131,7 @@ class TransparencySRSAndOverviewsRasterTools(FormPanel):
             return
 
         #Path INFO
-        pluginsManager = PluginsLocator.getManager()
-        appfolder = pluginsManager.getApplicationFolder().getAbsolutePath()
-        gdaladdoFile="%s/gvSIG/extensiones/org.gvsig.gdal.app.mainplugin/gdal/bin/gdal/apps/gdaladdo" % appfolder.replace("\\","/")
+        gdaladdoFile= getCommand("gdaladdo")
 
         #Request
         cmdGdaladdo=[
@@ -157,6 +152,18 @@ class TransparencySRSAndOverviewsRasterTools(FormPanel):
             msgbox("Error en el proceso")
         else:
             msgbox("Proceso ejecutado con exito")
+
+def getCommand(name):
+    packageManager = ToolsLocator.getPackageManager()
+    pluginsManager = PluginsLocator.getManager()
+    appfolder = pluginsManager.getApplicationFolder().getAbsolutePath()
+    if packageManager.getOperatingSystemFamily()=="win":
+        folder = "%s/gvSIG/extensiones/org.gvsig.gdal.app.mainplugin/gdal/bin/gdal/apps" % appfolder
+    else:
+        folder = "%s/gvSIG/extensiones/org.gvsig.gdal.app.mainplugin/gdal/" % appfolder
+    pathname = "%s/%s" % (folder, name)
+    pathname = pathname.replace("\\","/")
+    return pathname
 
 
 def rasterTools(*args):
