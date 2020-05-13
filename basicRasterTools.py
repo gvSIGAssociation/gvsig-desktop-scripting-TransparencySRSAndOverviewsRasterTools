@@ -31,7 +31,7 @@ class TransparencySRSAndOverviewsRasterTools(FormPanel):
 
         self.inputfileO = toolsSwingManager.createFilePickerController(self.txtInputFileO, self.btnFileO)
 
-        self.setPreferredSize(500,300)
+        self.setPreferredSize(600,300)
 
     def btnTransp_click(self, *args):
         #GUI INFO
@@ -65,7 +65,7 @@ class TransparencySRSAndOverviewsRasterTools(FormPanel):
         returnCode=subprocess.call(cmdGdalwarp)
         if returnCode!=0:
             logger('Error al ejecutar el comando de GDAL (returnCode %s)' %returnCode,LOGGER_WARN)
-            msgbox("Error en el proceso")
+            msgbox("Error en el proceso.")
         else:
             msgbox("Proceso ejecutado con exito")
 

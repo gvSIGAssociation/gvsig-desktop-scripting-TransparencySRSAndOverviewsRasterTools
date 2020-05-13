@@ -1,13 +1,13 @@
 #
-#Thu Feb 27 12:30:00 CET 2020
+#Wed May 13 14:00:48 CEST 2020
 owner=
 code=TransparencySRSAndOverviewsRasterTools
 java-version=j1_7
 official=true
 type=Script
-version=1.0.0-1
+version=1.0.0-3
 state=testing
-operating-system=win
+operating-system=all
 dependencies=
 sources-url=
 web-url=
@@ -16,7 +16,7 @@ model-version=1.0.1
 categories=Raster
 description=Basic raster tools.\n- Transparency\n- SRS\n- Overviews
 owner-url=
-buildNumber=1
-download-url=https\://github.com/gvSIGAssociation/gvsig-desktop-scripting-TransparencySRSAndOverviewsRasterTools/releases/download/1.0.0-1/gvSIG-desktop-2.5.0-TransparencySRSAndOverviewsRasterTools-1.0.0-1-testing-win-all-j1_7.gvspkg
-gvSIG-version=2.5.0
+buildNumber=3
+download-url=https\://github.com/gvSIGAssociation/gvsig-desktop-scripting-TransparencySRSAndOverviewsRasterTools/releases/download/1.0.0-3/gvSIG-desktop-2.5.1-TransparencySRSAndOverviewsRasterTools-1.0.0-3-testing-all-all-j1_7.gvspkg
+gvSIG-version=2.5.1
 name=Transparency, SRS and overviews raster tools
